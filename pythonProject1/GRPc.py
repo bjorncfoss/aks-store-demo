@@ -7,10 +7,10 @@ import mensagem_pb2_grpc
 from datetime import datetime
 from prometheus_client import start_http_server, Summary, Counter, Gauge
 import time
-
+ 
 def main():
     print(f"[INFO] Serviço virtual-customer iniciado às {datetime.now()}")
-   
+         
     # Define as métricas usadas para medir o prometheus
     REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
     ORDER_COUNTER = Counter('orders_total', 'Total number of orders processed')
@@ -19,7 +19,7 @@ def main():
     start_http_server(PROMETHEUS_PORT)
     print(f"[INFO] Servidor de métricas Prometheus iniciado na porta {PROMETHEUS_PORT}")
  
-    
+                           
     # Configurações de ambiente
     grpc_server_address = "order-service:50051"  # This is the gRPC server address (not HTTP)
 
