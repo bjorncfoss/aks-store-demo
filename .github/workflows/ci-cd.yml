@@ -45,7 +45,8 @@ jobs:
        docker push ${{ secrets.DOCKER_USERNAME}}/virtual_client:latest 
        docker push ${{ secrets.DOCKER_USERNAME}}/virtual_client:app-${{ github.run_number }}
 
-       docker push ${{ secrets.DOCKER_USERNAME}}/virtual_client_old:latest 
        docker push ${{ secrets.DOCKER_USERNAME}}/virtual_client_old:app-${{ github.run_number }}
+       docker push ${{ secrets.DOCKER_USERNAME}}/virtual_client_old:latest 
+       
 
   
