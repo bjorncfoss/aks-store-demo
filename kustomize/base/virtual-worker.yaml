@@ -16,10 +16,10 @@ spec:
         "kubernetes.io/os": linux
       containers:
       - name: virtual-worker
-        image: ghcr.io/azure-samples/aks-store-demo/virtual-worker:latest
+        image: grupo5sd/virtual_worker:1
         env:
         - name: MAKELINE_SERVICE_URL
-          value: http://makeline-service.myappproject.svc.cluster.local:3001/order/fetch
+          value: http://makeline-service:3001/
         - name: ORDERS_PER_HOUR
           value: "5"
         resources:
