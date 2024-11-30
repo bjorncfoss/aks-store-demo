@@ -10,7 +10,7 @@ def fetch_orders(stub):
     return response.orders
 
 def main():
-    order_service_url = "localhost:50052"  # Update with your gRPC server address
+    order_service_url = "localhost:3001"  # Update with your gRPC server address
     orders_per_hour = 3600  # Update with your desired orders per hour
 
     if orders_per_hour == 0:
