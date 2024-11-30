@@ -29,12 +29,12 @@ jobs:
     # Construir a imagem Docker e tagueá-la
     - name: Build and Tag Docker Image
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
+        docker build -t grupo5sd/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
 
     # Empurrar a imagem para o DockerHub
     - name: Push Docker Image
       run: |
-       docker push ${{ secrets.DOCKER_USERNAME}}/virtual_worker:latest 
+       docker push grupo5sd/virtual_worker:latest 
 
        
        
