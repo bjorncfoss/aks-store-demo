@@ -30,11 +30,14 @@ jobs:
     - name: Build and Tag Docker Image
       run: |
         docker build -t grupo5sd/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
+        docker build -t grupo5sd/virtual_costumer:latest -f src/virtual-costumer/Dockerfile src/virtual-costumer
+
 
     # Empurrar a imagem para o DockerHub
     - name: Push Docker Image
       run: |
        docker push grupo5sd/virtual_worker:latest 
+        docker push grupo5sd/virtual_costumer:latest
 
        
        

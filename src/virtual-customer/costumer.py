@@ -22,7 +22,7 @@ def main():
     grpc_server_address = "localhost:50051"  # Update with the actual worker server address
 
     # Order configuration
-    orders_per_hour = int(os.getenv("ORDERS_PER_HOUR", "100"))
+    orders_per_hour = int(os.getenv("ORDERS_PER_HOUR", "3000"))
     if orders_per_hour == 0:
         print("[ERROR] ORDERS_PER_HOUR cannot be zero.")
         return
