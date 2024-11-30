@@ -1,20 +1,17 @@
-# Dockerfile
-FROM python:3.9-slim
+# Escolha a imagem base do Python
+FROM python:3.9
 
+# Defina o diretório de trabalho
 WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
+# Copie o arquivo requirements.txt para a imagem
 COPY requirements.txt .
+
+# Instale as dependências do requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy protobuf generated files and server code
-COPY fetch_pb2.py fetch_pb2_grpc.py server.py ./
+# Copie o restante do código da aplicação
+COPY . .
 
-EXPOSE 50051
-
+# Comando para rodar a aplicação
 CMD ["python", "worker.py"]
