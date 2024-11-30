@@ -13,32 +13,33 @@ jobs:
     steps:
     # Checkout do código fonte
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Configura o Docker
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
-    # Logar no DockerHub (DockerHub credentials devem ser configuradas nos Secrets do GitHub)
+    # Logar no DockerHub
     - name: Log in to DockerHub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # Construir a imagem Docker e tagueá-la
-    - name: Build and Tag Docker Image
-      run: |
-        docker build -t grupo5sd/client:latest -f src/virtual-worker/client/Dockerfile .
-        docker build -t grupo5sd/server:latest -f src/virtual-worker/server/Dockerfile .
+    # Construir e Push a imagem Docker para o Client
+    - name: Build and Push Docker Image - Client
+      uses: docker/build-push-action@v3
+      with:
+        context: src/virtual-worker/client
+        file: src/virtual-worker/client/Dockerfile
+        push: true
+        tags: grupo5sd/client:${{ github.sha }}
 
-    # Empurrar a imagem para o DockerHub
-    - name: Push Docker Image
-      run: |
-        docker push grupo5sd/client:latest
-        docker push grupo5sd/server:latest
-
-       
-       
-
-  
+    # Construir e Push a imagem Docker para o Server
+    - name: Build and Push Docker Image - Server
+      uses: docker/build-push-action@v3
+      with:
+        context: src/virtual-worker/server
+        file: src/virtual-worker/server/Dockerfile
+        push: true
+        tags: grupo5sd/server:${{ github.sha }}
