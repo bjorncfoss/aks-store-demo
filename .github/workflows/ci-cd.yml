@@ -1,9 +1,10 @@
 name: Build and Push Docker Image
 
 on:
-  pull_request:
+  push:
     branches:
       - main
+      - pipeline
 
 jobs:
   build:
@@ -28,22 +29,12 @@ jobs:
     # Construir a imagem Docker e tagueá-la
     - name: Build and Tag Docker Image
       run: |
+        docker build -t grupo5sd/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
 
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/virtual_worker:app-${{ github.run_number }} -f src/virtual-worker/Dockerfile src/virtual-worker
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
-
-
-
-
-
-        
-  #fazer para outros serviços
-    
     # Empurrar a imagem para o DockerHub
     - name: Push Docker Image
       run: |
-       docker push ${{ secrets.DOCKER_USERNAME}}/virtual_worker:latest 
-       docker push ${{ secrets.DOCKER_USERNAME}}/virtual_worker:app-${{ github.run_number }}
+       docker push grupo5sd/virtual_worker:latest 
 
        
        
