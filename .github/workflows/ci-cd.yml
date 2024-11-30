@@ -32,13 +32,6 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/virtual_worker:app-${{ github.run_number }} -f src/virtual-worker/Dockerfile src/virtual-worker
         docker build -t ${{ secrets.DOCKER_USERNAME }}/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
 
-
-
-
-
-        
-  #fazer para outros serviços
-    
     # Empurrar a imagem para o DockerHub
     - name: Push Docker Image
       run: |
