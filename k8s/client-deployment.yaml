@@ -1,0 +1,21 @@
+# k8s/client-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-client
+  template:
+    metadata:
+      labels:
+        app: order-client
+    spec:
+      containers:
+      - name: client
+        image: grupo5sd/order-client:latest
+        env:
+        - name: ORDER_SERVICE_URL
+          value: "order-server-service:50052"
