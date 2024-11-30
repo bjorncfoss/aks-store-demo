@@ -32,7 +32,7 @@ jobs:
         docker build -t grupo5sd/virtual_worker:latest -f src/virtual-worker/Dockerfile src/virtual-worker
         docker build -t grupo5sd/virtual_customer:latest -f src/virtual-customer/Dockerfile src/virtual-customer
 
-    # Empurrar a imagem para o DockerHub
+    # Empurrar a imagem para o DockerHub e
     - name: Push Docker Image
       run: |
        docker push grupo5sd/virtual_worker:latest 
