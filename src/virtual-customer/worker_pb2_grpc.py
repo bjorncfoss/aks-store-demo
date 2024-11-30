@@ -3,9 +3,9 @@
 import grpc
 import warnings
 
-import mensagem_pb2 as mensagem__pb2
+import worker_pb2 as worker__pb2
 
-GRPC_GENERATED_VERSION = '1.67.0'
+GRPC_GENERATED_VERSION = '1.68.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -14,18 +14,18 @@ try:
     _version_not_supported = first_version_is_lower(GRPC_VERSION, GRPC_GENERATED_VERSION)
 except ImportError:
     _version_not_supported = True
- 
+
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in mensagem_pb2_grpc.py depends on'
+        + f' but the generated code in worker_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class MensagemServiceStub(object):
+class WorkerServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,43 +34,43 @@ class MensagemServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.EnviarMensagem = channel.unary_unary(
-                '/MensagemService/EnviarMensagem',
-                request_serializer=mensagem__pb2.MensagemRequest.SerializeToString,
-                response_deserializer=mensagem__pb2.MensagemResponse.FromString,
+        self.ProcessOrder = channel.unary_unary(
+                '/WorkerService/ProcessOrder',
+                request_serializer=worker__pb2.OrderRequest.SerializeToString,
+                response_deserializer=worker__pb2.OrderResponse.FromString,
                 _registered_method=True)
 
 
-class MensagemServiceServicer(object):
+class WorkerServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def EnviarMensagem(self, request, context):
+    def ProcessOrder(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_MensagemServiceServicer_to_server(servicer, server):
+def add_WorkerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'EnviarMensagem': grpc.unary_unary_rpc_method_handler(
-                    servicer.EnviarMensagem,
-                    request_deserializer=mensagem__pb2.MensagemRequest.FromString,
-                    response_serializer=mensagem__pb2.MensagemResponse.SerializeToString,
+            'ProcessOrder': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessOrder,
+                    request_deserializer=worker__pb2.OrderRequest.FromString,
+                    response_serializer=worker__pb2.OrderResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'MensagemService', rpc_method_handlers)
+            'WorkerService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('MensagemService', rpc_method_handlers)
+    server.add_registered_method_handlers('WorkerService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class MensagemService(object):
+class WorkerService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def EnviarMensagem(request,
+    def ProcessOrder(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class MensagemService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/MensagemService/EnviarMensagem',
-            mensagem__pb2.MensagemRequest.SerializeToString,
-            mensagem__pb2.MensagemResponse.FromString,
+            '/WorkerService/ProcessOrder',
+            worker__pb2.OrderRequest.SerializeToString,
+            worker__pb2.OrderResponse.FromString,
             options,
             channel_credentials,
             insecure,

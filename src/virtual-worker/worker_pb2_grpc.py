@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import fetch_pb2 as fetch__pb2
+import worker_pb2 as worker__pb2
 
 GRPC_GENERATED_VERSION = '1.68.0'
 GRPC_VERSION = grpc.__version__
@@ -18,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in fetch_pb2_grpc.py depends on'
+        + f' but the generated code in worker_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class FetchServiceStub(object):
+class WorkerServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,43 +34,43 @@ class FetchServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.Fetch = channel.unary_unary(
-                '/FetchService/Fetch',
-                request_serializer=fetch__pb2.FetchRequest.SerializeToString,
-                response_deserializer=fetch__pb2.FetchResponse.FromString,
+        self.ProcessOrder = channel.unary_unary(
+                '/WorkerService/ProcessOrder',
+                request_serializer=worker__pb2.OrderRequest.SerializeToString,
+                response_deserializer=worker__pb2.OrderResponse.FromString,
                 _registered_method=True)
 
 
-class FetchServiceServicer(object):
+class WorkerServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def Fetch(self, request, context):
+    def ProcessOrder(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_FetchServiceServicer_to_server(servicer, server):
+def add_WorkerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Fetch': grpc.unary_unary_rpc_method_handler(
-                    servicer.Fetch,
-                    request_deserializer=fetch__pb2.FetchRequest.FromString,
-                    response_serializer=fetch__pb2.FetchResponse.SerializeToString,
+            'ProcessOrder': grpc.unary_unary_rpc_method_handler(
+                    servicer.ProcessOrder,
+                    request_deserializer=worker__pb2.OrderRequest.FromString,
+                    response_serializer=worker__pb2.OrderResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'FetchService', rpc_method_handlers)
+            'WorkerService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('FetchService', rpc_method_handlers)
+    server.add_registered_method_handlers('WorkerService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class FetchService(object):
+class WorkerService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Fetch(request,
+    def ProcessOrder(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class FetchService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/FetchService/Fetch',
-            fetch__pb2.FetchRequest.SerializeToString,
-            fetch__pb2.FetchResponse.FromString,
+            '/WorkerService/ProcessOrder',
+            worker__pb2.OrderRequest.SerializeToString,
+            worker__pb2.OrderResponse.FromString,
             options,
             channel_credentials,
             insecure,

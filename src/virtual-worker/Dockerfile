@@ -17,4 +17,4 @@ COPY fetch_pb2.py fetch_pb2_grpc.py server.py ./
 
 EXPOSE 50051
 
-CMD ["python", "server.py"]
+CMD ["python", "worker.py"]
