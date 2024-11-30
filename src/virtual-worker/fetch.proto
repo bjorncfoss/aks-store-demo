@@ -1,0 +1,14 @@
+// fetch.proto
+syntax = "proto3";
+
+service FetchService {
+  rpc Fetch(FetchRequest) returns (FetchResponse);
+}
+
+message FetchRequest {
+  string query = 1;
+}
+
+message FetchResponse {
+  string result = 1;
+}

@@ -1,21 +1,20 @@
-# src/virtual-worker/client/Dockerfile
+# Dockerfile
 FROM python:3.9-slim
 
 WORKDIR /app
 
-# Copy and install dependencies
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the proto file
-COPY order_service.proto .
+# Copy protobuf generated files and server code
+COPY fetch_pb2.py fetch_pb2_grpc.py server.py ./
 
-# Generate protobuf files
-RUN python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. order_service.proto
+EXPOSE 50051
 
-# Copy the application code
-COPY client.py .
-COPY order_service_pb2.py .
-COPY order_service_pb2_grpc.py .
-
-CMD ["python", "client.py"]
+CMD ["python", "server.py"]

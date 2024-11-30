@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import order_service_pb2 as order__service__pb2
+import fetch_pb2 as fetch__pb2
 
 GRPC_GENERATED_VERSION = '1.68.0'
 GRPC_VERSION = grpc.__version__
@@ -18,14 +18,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in order_service_pb2_grpc.py depends on'
+        + f' but the generated code in fetch_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class OrderServiceStub(object):
+class FetchServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -34,43 +34,43 @@ class OrderServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.FetchOrders = channel.unary_unary(
-                '/orderservice.OrderService/FetchOrders',
-                request_serializer=order__service__pb2.FetchOrdersRequest.SerializeToString,
-                response_deserializer=order__service__pb2.FetchOrdersResponse.FromString,
+        self.Fetch = channel.unary_unary(
+                '/FetchService/Fetch',
+                request_serializer=fetch__pb2.FetchRequest.SerializeToString,
+                response_deserializer=fetch__pb2.FetchResponse.FromString,
                 _registered_method=True)
 
 
-class OrderServiceServicer(object):
+class FetchServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def FetchOrders(self, request, context):
+    def Fetch(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_OrderServiceServicer_to_server(servicer, server):
+def add_FetchServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'FetchOrders': grpc.unary_unary_rpc_method_handler(
-                    servicer.FetchOrders,
-                    request_deserializer=order__service__pb2.FetchOrdersRequest.FromString,
-                    response_serializer=order__service__pb2.FetchOrdersResponse.SerializeToString,
+            'Fetch': grpc.unary_unary_rpc_method_handler(
+                    servicer.Fetch,
+                    request_deserializer=fetch__pb2.FetchRequest.FromString,
+                    response_serializer=fetch__pb2.FetchResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'orderservice.OrderService', rpc_method_handlers)
+            'FetchService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('orderservice.OrderService', rpc_method_handlers)
+    server.add_registered_method_handlers('FetchService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class OrderService(object):
+class FetchService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def FetchOrders(request,
+    def Fetch(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class OrderService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/orderservice.OrderService/FetchOrders',
-            order__service__pb2.FetchOrdersRequest.SerializeToString,
-            order__service__pb2.FetchOrdersResponse.FromString,
+            '/FetchService/Fetch',
+            fetch__pb2.FetchRequest.SerializeToString,
+            fetch__pb2.FetchResponse.FromString,
             options,
             channel_credentials,
             insecure,
