@@ -1,6 +1,6 @@
 grpcio==1.68.0
 grpcio-tools==1.68.0
 requests==2.28.1
-protobuf==4.28.3  # Corrected protobuf version
-prometheus-client==0.14.1  # Fixed capitalization
-grpcio-health-checking==1.68.0  # Added health-checking library
+protobuf==4.21.12  # Compatible version
+prometheus-client==0.14.1
+grpcio-health-checking==1.68.0  # Include if using health checking
