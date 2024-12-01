@@ -51,7 +51,7 @@ def serve():
     health_servicer.set('', health_pb2.HealthCheckResponse.SERVING)
 
     port = os.getenv("GRPC_SERVER_PORT", "50051")
-    server.add_insecure_port(f'[::]:{port}')
+    server.add_insecure_port(f'0.0.0.0:{port}')
     logging.info(f"gRPC Worker Server started on port {port}")
     
     def handle_shutdown(signum, frame):
