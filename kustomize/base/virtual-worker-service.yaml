@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtual-worker
+  labels:
+    app: virtual-worker
+spec:
+  selector:
+    app: virtual-worker
+  ports:
+    - protocol: TCP
+      port: 50051
+      targetPort: 50051

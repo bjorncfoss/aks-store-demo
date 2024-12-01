@@ -17,9 +17,8 @@ spec:
       containers:
       - name: virtual-worker
         image: grupo5sd/virtual_worker:latest
+        imagePullPolicy: Always
         env:
-        - name: GRPC_SERVER_ADDRESS  # Updated for clarity
-          value: "order-service:50051"
         - name: ORDERS_PER_HOUR
           value: "5"
         resources:
@@ -29,12 +28,12 @@ spec:
           limits:
             cpu: 250m
             memory: 128Mi
-        livenessProbe:  # Add liveness probe
+        livenessProbe:
           tcpSocket:
             port: 50051
           initialDelaySeconds: 5
           periodSeconds: 10
-        readinessProbe:  # Add readiness probe
+        readinessProbe:
           tcpSocket:
             port: 50051
           initialDelaySeconds: 5
