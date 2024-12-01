@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: virtual-customer
 spec:
-  replicas: 1
+  replicas: 3  # Increase replicas for high availability
   selector:
     matchLabels:
       app: virtual-customer
@@ -19,11 +19,21 @@ spec:
         image: grupo5sd/virtual_customer:latest
         env:
         - name: ORDER_SERVICE_URL
-          value: http://order-service:3000/
+          value: "order-service:50051"  # Ensure this matches the service name for the gRPC server
         resources:
           requests:
-            cpu: 1m
-            memory: 20Mi
+            cpu: 100m
+            memory: 64Mi
           limits:
-            cpu: 1m
-            memory: 50Mi
+            cpu: 250m
+            memory: 128Mi
+        livenessProbe:  # Check if the application is running
+          tcpSocket:
+            port: 50051
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:  # Ensure the pod is ready to receive traffic
+          tcpSocket:
+            port: 50051
+          initialDelaySeconds: 5
+          periodSeconds: 10

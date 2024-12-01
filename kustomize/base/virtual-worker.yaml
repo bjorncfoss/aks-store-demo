@@ -18,14 +18,24 @@ spec:
       - name: virtual-worker
         image: grupo5sd/virtual_worker:latest
         env:
-        - name: MAKELINE_SERVICE_URL
-          value: http://makeline-service:3001/
+        - name: GRPC_SERVER_ADDRESS  # Updated for clarity
+          value: "order-service:50051"
         - name: ORDERS_PER_HOUR
           value: "5"
         resources:
           requests:
-            cpu: 1m
-            memory: 1Mi
+            cpu: 100m
+            memory: 64Mi
           limits:
-            cpu: 1m
-            memory: 5Mi
+            cpu: 250m
+            memory: 128Mi
+        livenessProbe:  # Add liveness probe
+          tcpSocket:
+            port: 50051
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:  # Add readiness probe
+          tcpSocket:
+            port: 50051
+          initialDelaySeconds: 5
+          periodSeconds: 10

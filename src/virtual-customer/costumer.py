@@ -2,33 +2,50 @@ import grpc
 import time
 import random
 import os
+import signal
+import sys
 from datetime import datetime
 from prometheus_client import start_http_server, Summary, Counter, Gauge
+import logging
 import worker_pb2
 import worker_pb2_grpc
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def handle_shutdown(signum, frame):
+    logging.info("[INFO] Virtual Customer shutting down...")
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, handle_shutdown)
+signal.signal(signal.SIGINT, handle_shutdown)
+
 def main():
-    print(f"[INFO] Virtual Customer started at {datetime.now()}")
+    logging.info(f"Virtual Customer started at {datetime.now()}")
 
     # Prometheus metrics
     REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
     ORDER_COUNTER = Counter('orders_total', 'Total number of orders processed')
     ORDER_SIZE_GAUGE = Gauge('order_size_items', 'Number of items in an order')
-    PROMETHEUS_PORT = 8000  # Change if needed
+    PROMETHEUS_PORT = int(os.getenv("PROMETHEUS_PORT", "8000"))
     start_http_server(PROMETHEUS_PORT)
-    print(f"[INFO] Prometheus metrics server started on port {PROMETHEUS_PORT}")
+    logging.info(f"Prometheus metrics server started on port {PROMETHEUS_PORT}")
 
     # gRPC server address
-    grpc_server_address = "localhost:50051"  # Update with the actual worker server address
+    grpc_server_address = os.getenv("ORDER_SERVICE_URL", "order-service:50051")  # Use Kubernetes service
+    logging.info(f"Connecting to gRPC server at {grpc_server_address}")
 
     # Order configuration
-    orders_per_hour = int(os.getenv("ORDERS_PER_HOUR", "3000"))
-    if orders_per_hour == 0:
-        print("[ERROR] ORDERS_PER_HOUR cannot be zero.")
+    try:
+        orders_per_hour = int(os.getenv("ORDERS_PER_HOUR", "3000"))
+        if orders_per_hour <= 0:
+            raise ValueError("ORDERS_PER_HOUR must be greater than zero.")
+    except ValueError as e:
+        logging.error(f"Invalid ORDERS_PER_HOUR: {e}")
         return
 
     order_submission_interval = 3600 / orders_per_hour
-    print(f"[INFO] Interval between orders: {order_submission_interval:.2f} seconds")
+    logging.info(f"Interval between orders: {order_submission_interval:.2f} seconds")
 
     # gRPC channel and stub
     channel = grpc.insecure_channel(grpc_server_address)
@@ -67,12 +84,12 @@ def main():
                 elapsed_time = (datetime.now() - start_time).total_seconds()
 
                 if response.success:
-                    print(f"[INFO] Order {order.order_id} sent successfully in {elapsed_time:.2f}s. "
-                          f"Response: {response.message}")
+                    logging.info(f"Order {order.order_id} sent successfully in {elapsed_time:.2f}s. "
+                                 f"Response: {response.message}")
                 else:
-                    print(f"[ERROR] Order {order.order_id} failed. Response: {response.message}")
+                    logging.error(f"Order {order.order_id} failed. Response: {response.message}")
         except grpc.RpcError as e:
-            print(f"[ERROR] gRPC request error: {e}")
+            logging.error(f"gRPC request error: {e}")
 
         # Wait before sending the next order
         time.sleep(order_submission_interval)
