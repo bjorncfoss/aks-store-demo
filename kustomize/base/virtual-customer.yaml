@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-customer
+  namespace: argocd  # Add the namespace here
+  labels:
+    app: virtual-customer
 spec:
   replicas: 3
   selector:
@@ -20,7 +23,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: ORDER_SERVICE_URL
-          value: "virtual-worker:50051"
+          value: "virtual-worker:50051"  # The service name within the same namespace
         resources:
           requests:
             cpu: 100m
