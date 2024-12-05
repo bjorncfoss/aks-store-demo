@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-customer
-  namespace: argocd  # Add the namespace here
+  namespace: argocd
   labels:
     app: virtual-customer
 spec:
@@ -17,13 +17,24 @@ spec:
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
+      initContainers:
+      - name: wait-for-virtual-worker
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -zv virtual-worker 50051; do echo "Waiting for virtual-worker..."; sleep 2; done;']
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 20Mi
       containers:
       - name: virtual-customer
         image: grupo5sd/virtual_customer:latest
         imagePullPolicy: Always
         env:
         - name: ORDER_SERVICE_URL
-          value: "virtual-worker:50051"  # The service name within the same namespace
+          value: "virtual-worker:50051"
         resources:
           requests:
             cpu: 100m
